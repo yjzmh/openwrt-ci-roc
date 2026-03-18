@@ -1,18 +1,6 @@
 # 修改默认IP & 固件名称 & 编译署名和时间
 sed -i 's/192.168.1.1/192.168.16.1/g' package/base-files/files/bin/config_generate
 sed -i "s/hostname='.*'/hostname='LibWrt'/g" package/base-files/files/bin/config_generate
-sed -i "s#_('Firmware Version'), (L\.isObject(boardinfo\.release) ? boardinfo\.release\.description + ' / ' : '') + (luciversion || ''),# \
-            _('Firmware Version'),\n \
-            E('span', {}, [\n \
-                (L.isObject(boardinfo.release)\n \
-                ? boardinfo.release.description + ' / '\n \
-                : '') + (luciversion || '') + ' / ',\n \
-            E('a', {\n \
-                href: 'https://github.com/laipeng668/openwrt-ci-roc/releases',\n \
-                target: '_blank',\n \
-                rel: 'noopener noreferrer'\n \
-                }, [ 'Built by Roc $(date "+%Y-%m-%d %H:%M:%S")' ])\n \
-            ]),#" feeds/luci/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js
 
 # 调整NSS驱动q6_region内存区域预留大小（ipq6018.dtsi默认预留85MB，ipq6018-512m.dtsi默认预留55MB，带WiFi必须至少预留54MB，以下分别是改成预留16MB、32MB、64MB和96MB）
 # sed -i 's/reg = <0x0 0x4ab00000 0x0 0x[0-9a-f]\+>/reg = <0x0 0x4ab00000 0x0 0x01000000>/' target/linux/qualcommax/files/arch/arm64/boot/dts/qcom/ipq6018-512m.dtsi
@@ -36,14 +24,14 @@ sed -i 's/opp-microvolt = <937500>;/opp-microvolt = <950000>;/' target/linux/qua
 #rm -rf feeds/packages/lang/golang
 
 # Git稀疏克隆，只克隆指定目录到本地
-function git_sparse_clone() {
-  branch="$1" repourl="$2" && shift 2
-  git clone --depth=1 -b $branch --single-branch --filter=blob:none --sparse $repourl
-  repodir=$(echo $repourl | awk -F '/' '{print $(NF)}')
-  cd $repodir && git sparse-checkout set $@
-  mv -f $@ ../package
-  cd .. && rm -rf $repodir
-}
+#function git_sparse_clone() {
+ # branch="$1" repourl="$2" && shift 2
+ # git clone --depth=1 -b $branch --single-branch --filter=blob:none --sparse $repourl
+ # repodir=$(echo $repourl | awk -F '/' '{print $(NF)}')
+ # cd $repodir && git sparse-checkout set $@
+ # mv -f $@ ../package
+ # cd .. && rm -rf $repodir
+#}
 
 # ariang & Go & frp & Argon & Aurora & OpenList & Lucky & wechatpush & OpenAppFilter & 集客无线AC控制器 & 雅典娜LED控制
 #git_sparse_clone ariang https://github.com/laipeng668/packages net/ariang
